@@ -47,6 +47,8 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 
         protected override void CheckJudgement(bool userTriggered)
         {
+            if(CharacterHealth <= 0)
+                Judgement.Result = HitResult.Miss;
         }
 
         private const float playerSpeed = 0.5f;
