@@ -41,7 +41,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
             if (bulletCount < 1)
                 Dispose();
         }
-        protected void bulletAddRad(float speed, float radian)
+        protected void bulletAddRad(float speed, float angle)
         {
             bulletCount++;
             Bullet bullet;
@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
                 Origin = Anchor.Centre,
                 Depth = 5,
                 BulletColor = PatternColor,
-                BulletAngleRadian = radian,
+                BulletAngleRadian = angle,
                 BulletSpeed = speed,
                 BulletWidth = PatternBulletWidth,
             });
@@ -79,11 +79,27 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
             }
         }
     }
-    public class ConcaveWave : BulletPattern
+    public class Line : BulletPattern
     {
         public override int PatternID => 1;
 
-
+        Bullet b;
+        public Line(int team)
+        {
+            Team = team;
+        }
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+            if (PatternAngleRadian == -10)
+                PatternAngleRadian = MathHelper.DegreesToRadians(PatternAngleDegree - 90);
+            float speedModifier = 0;
+            for (int i = 1; i <= 3 + PatternComplexity; i++)
+            {
+                bulletAddRad(0.12f + speedModifier, PatternAngleRadian);
+                speedModifier += 0.02f;
+            }
+        }
     }
     public class ConvexWave : BulletPattern
     {

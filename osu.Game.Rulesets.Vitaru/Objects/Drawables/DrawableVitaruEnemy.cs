@@ -207,7 +207,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 PatternAngleRadian = playerPos,
                 PatternSpeed = 0.2f,
                 PatternBulletWidth = 8,
-                PatternComplexity = 1,
+                PatternComplexity = 2,
             });
             w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
         }
