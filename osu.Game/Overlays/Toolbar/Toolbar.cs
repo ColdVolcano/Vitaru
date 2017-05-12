@@ -52,12 +52,10 @@ namespace osu.Game.Overlays.Toolbar
                             Action = () => OnHome?.Invoke()
                         },
                         new ToolbarModeSelector(),
-                        /*
                         new ToolbarOsuMon
                         {
                             Action = () => OnOsuMon?.Invoke()
                         },
-                        */
                     }
                 },
                 new FillFlowContainer

@@ -27,6 +27,8 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         public DrawableVitaruPlayer(VitaruPlayer player) : base(player)
         {
             this.player = player;
+
+            //Gross Key stuff
             keys[Key.Up] = false;
             keys[Key.Right] = false;
             keys[Key.Down] = false;
@@ -35,6 +37,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             keys[Key.X] = false;
             keys[Key.LShift] = false;
             keys[Key.RShift] = false;
+
             Origin = Anchor.Centre;
             Position = player.Position;
             CharacterType = HitObjectType.Player;
@@ -42,7 +45,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Team = 0;
             HitboxColor = Color4.Yellow;
             HitboxWidth = 4;
-            OnShoot = shoot;
+            CharacterShoot = shoot;
         }
 
         protected override void CheckJudgement(bool userTriggered)

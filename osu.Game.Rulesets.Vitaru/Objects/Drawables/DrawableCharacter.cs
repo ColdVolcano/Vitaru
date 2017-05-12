@@ -40,7 +40,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         protected float HitboxWidth { get; set; }
 
         public Action OnDeath { get; set; }
-        public Action OnShoot { get; set; }
+        public Action CharacterShoot { get; set; }
         public bool Kiai { get; private set; }
 
         public DrawableCharacter(VitaruHitObject hitObject) : base(hitObject)
@@ -97,7 +97,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 if (timeSinceLastShoot / 1000.0 > 1 / BPM / 30.0)
                 {
                     sampleShoot.Play();
-                    OnShoot?.Invoke();
+                    CharacterShoot?.Invoke();
                     timeSinceLastShoot -= 1 / (BPM / 30.0) * 1000.0;
                 }
             }
