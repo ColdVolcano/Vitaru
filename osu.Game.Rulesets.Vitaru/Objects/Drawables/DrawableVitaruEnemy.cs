@@ -116,6 +116,14 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Expire();
         }
 
+        private void leave()
+        {
+            int r = RNG.Next(-100, 612);
+            MoveTo(new Vector2(r, -300), 2000, EasingTypes.InCubic);
+            FadeOut(2000, EasingTypes.InCubic);
+            ScaleTo(new Vector2(0.75f), 2000, EasingTypes.InCubic);
+        }
+
         /// <summary>
         /// All the hitcircle stuff
         /// </summary>
@@ -124,10 +132,10 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             if (HitObject.StartTime < Time.Current && hasShot == false)
             {
                 enemyShoot();
-                FadeOut(Math.Min(TIME_FADEOUT * 2, TIME_PREEMPT));
+                leave();
                 hasShot = true;
             }
-            if (HitObject.StartTime < Time.Current && hasShot == true && Alpha < 0.1f)
+            if (HitObject.StartTime < Time.Current && hasShot == true && Position.Y <= -300)
             {
                 Dispose();
             }
@@ -147,11 +155,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             if (enemy.EndTime < Time.Current && hasShot == true && sliderDone == false)
             {
                 enemyShoot();
-                FadeOut(Math.Min(TIME_FADEOUT * 2, TIME_PREEMPT));
+                leave();
                 sliderDone = true;
             }
 
-            if (enemy.EndTime < Time.Current && hasShot == true && Alpha < 0.1f)
+            if (enemy.EndTime < Time.Current && hasShot == true && Position.Y <= -30)
             {
                 Dispose();
             }
