@@ -79,6 +79,10 @@
       <Project>{f167e17a-7de6-4af5-b920-a5112296c695}</Project>
       <Name>osu.Game.Rulesets.Taiko</Name>
     </ProjectReference>
+    <ProjectReference Include="..\osu.Game.Rulesets.Vitaru\osu.Game.Rulesets.Vitaru.csproj">
+      <Project>{9a615027-b2ab-435e-b865-0c7209933457}</Project>
+      <Name>osu.Game.Rulesets.Vitaru</Name>
+    </ProjectReference>
     <ProjectReference Include="..\osu.Game\osu.Game.csproj">
       <Project>{0D3FBF8A-7464-4CF7-8C90-3E7886DF2D4D}</Project>
       <Name>osu.Game</Name>

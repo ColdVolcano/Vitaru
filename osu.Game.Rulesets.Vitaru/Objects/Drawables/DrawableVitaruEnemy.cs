@@ -42,17 +42,13 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Alpha = 1;
         }
 
-        private int patternDifficulty = 1; // It will be depending on OD in future
-        private float circleAngle = 1f; // Angle of circles currently in degree
-        private float randomDirection = 0; // For more bullet hell !
-        private int bulletPattern = 1;
         private bool hasShot = false;
         private bool sliderDone = false;
 
         protected override void Update()
         {
             enemy.EnemyPosition = enemy.Position;
-            bulletPattern = RNG.Next(1, 6); // could be remplaced by map seed, with stackleniency
+            int bulletPattern = RNG.Next(1, 6); // could be remplaced by map seed, with stackleniency
 
             HitDetect();
 
@@ -197,96 +193,23 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         /// <summary>
         /// All the shooting stuff
         /// </summary>
-        private void bulletAddDeg(float speed, float degree)
-        {
-            Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
-            {
-                Origin = Anchor.Centre,
-                Depth = 1,
-                BulletColor = Color4.Cyan,
-                BulletAngleDegree = playerPos + degree,
-                BulletSpeed = speed,
-                BulletWidth = 10,
-            });
-            bullet.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), bullet));
-        }
-
-        private void bulletAddRad(float speed, float degree)
-        {
-            Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
-            {
-                Origin = Anchor.Centre,
-                Depth = 1,
-                BulletColor = enemyColor,
-                BulletAngleRadian = playerPos + degree,
-                BulletSpeed = speed,
-                BulletWidth = 8,
-            });
-            bullet.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), bullet));
-        }
 
         private void enemyShoot()
         {
             playerRelativePositionAngle();
-            patternDifficulty = RNG.Next(0, 5); // For circle currently
-            randomDirection = RNG.Next(-50, 51); // Between -0.05f and 0.05f
-            randomDirection = randomDirection / 100; // It seems that add / 100 after the random breaks randomDirection idk why
-
-            float speedModifier;
-            float directionModifier;
-
             PlaySamples();
-
-            switch (bulletPattern)
+            Wave w;
+            VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(1)
             {
-                case 1: // Wave
-                    directionModifier = -0.1f * patternDifficulty;
-                    for (int i = 1; i <= (3 * patternDifficulty); i++)
-                    {
-                        bulletAddRad(0.15f, randomDirection + directionModifier);
-                        directionModifier += 0.1f;
-                    }
-                    break;
-
-                case 2: // Line
-                    speedModifier = 0;
-                    for (int i = 1; i <= 3 + patternDifficulty; i++)
-                    {
-                        bulletAddRad(0.12f + speedModifier, randomDirection);
-                        speedModifier += 0.02f;
-                    }
-                    break;
-
-                case 3: // Cool wave
-                    speedModifier = 0.02f + 0.01f * (patternDifficulty - 1);
-                    directionModifier = -0.15f - 0.075f * (patternDifficulty - 1);
-                    for (int i = 1; i <= 3 + patternDifficulty * 2; i++)
-                    {
-                        bulletAddRad(
-                            0.1f + Math.Abs(speedModifier),
-                            directionModifier + randomDirection
-                        );
-                        speedModifier -= 0.01f;
-                        directionModifier += 0.075f;
-                    }
-                    break;
-
-                case 4: // Circle
-                    directionModifier = (float)(90 / Math.Pow(2, patternDifficulty));
-                    circleAngle = 0;
-                    for (int j = 1; j <= Math.Pow(2, patternDifficulty + 2); j++)
-                    {
-                        bulletAddDeg(0.15f, circleAngle);
-                        circleAngle += directionModifier;
-                    }
-                    break;
-
-                case 5: // Fast shot !
-                    bulletAddRad(0.30f, 0 + randomDirection);
-                    break;
-            }
+                Origin = Anchor.Centre,
+                Depth = 0,
+                PatternColor = Color4.Green,
+                PatternAngleRadian = playerPos,
+                PatternSpeed = 0.2f,
+                PatternBulletWidth = 8,
+                PatternComplexity = 1,
+            });
+            w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
         }
 
         public float playerRelativePositionAngle()
