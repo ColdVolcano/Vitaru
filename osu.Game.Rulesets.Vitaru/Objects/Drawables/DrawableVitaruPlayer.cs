@@ -61,21 +61,44 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             HitDetect();
 
             playerInput();
+            playerMovement();
+        }
+
+        private void playerMovement()
+        {
+            //Handles Player Speed
+            float yTranslationDistance = playerSpeed * (float)(Clock.ElapsedFrameTime);
+            float xTranslationDistance = playerSpeed * (float)(Clock.ElapsedFrameTime);
+
+            if (keys[Key.LShift] | keys[Key.RShift])
+            {
+                xTranslationDistance /= 4;
+                yTranslationDistance /= 4;
+            }
+            if (keys[Key.Up])
+            {
+                VitaruPlayer.PlayerPosition.Y -= yTranslationDistance;
+            }
+            if (keys[Key.Left])
+            {
+                VitaruPlayer.PlayerPosition.X -= xTranslationDistance;
+            }
+            if (keys[Key.Down])
+            {
+                VitaruPlayer.PlayerPosition.Y += yTranslationDistance;
+            }
+            if (keys[Key.Right])
+            {
+                VitaruPlayer.PlayerPosition.X += xTranslationDistance;
+            }
+
+            VitaruPlayer.PlayerPosition = Vector2.ComponentMin(VitaruPlayer.PlayerPosition, playerBounds.Yw);
+            VitaruPlayer.PlayerPosition  = Vector2.ComponentMax(VitaruPlayer.PlayerPosition, playerBounds.Xz);
+            Position = VitaruPlayer.PlayerPosition;
         }
 
         private void playerInput()
         {
-            //Handles Player Speed
-            var pos = Position;
-            float ySpeed = playerSpeed * (float)(Clock.ElapsedFrameTime);
-            float xSpeed = playerSpeed * (float)(Clock.ElapsedFrameTime);
-
-            //All these handle keys and when they are or aren't pressed
-            if (keys[Key.LShift] | keys[Key.RShift])
-            {
-                xSpeed /= 3;
-                ySpeed /= 3;
-            }
             if (keys[Key.Z])
             {
                 Shooting = true;
@@ -86,32 +109,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             }
             if (keys[Key.X])
             {
-                Spell();
+                spell();
             }
-            if (keys[Key.Up])
-            {
-                pos.Y -= ySpeed;
-            }
-            if (keys[Key.Left])
-            {
-                pos.X -= xSpeed;
-            }
-            if (keys[Key.Down])
-            {
-                pos.Y += ySpeed;
-            }
-            if (keys[Key.Right])
-            {
-                pos.X += xSpeed;
-            }
-
-            pos = Vector2.ComponentMin(pos, playerBounds.Yw);
-            pos = Vector2.ComponentMax(pos, playerBounds.Xz);
-            Position = pos;
-            VitaruPlayer.PlayerPosition = pos;
         }
 
-        private void Spell()
+        private void spell()
         {
             if(Time.Current > savedTime + 10000)
             {
