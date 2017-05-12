@@ -131,7 +131,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             VitaruPlayfield.vitaruPlayfield.Add(a = new Wave(Team)
             {
                 Origin = Anchor.Centre,
-                Depth = 0,
+                Depth = 5,
                 PatternColor = Color4.Red,
                 PatternAngleDegree = 0,
                 PatternSpeed = 1f,

@@ -202,7 +202,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(1)
             {
                 Origin = Anchor.Centre,
-                Depth = 0,
+                Depth = 6,
                 PatternColor = Color4.Green,
                 PatternAngleRadian = playerPos,
                 PatternSpeed = 0.2f,

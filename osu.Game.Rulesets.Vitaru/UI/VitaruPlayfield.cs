@@ -9,12 +9,17 @@ using OpenTK;
 using osu.Game.Rulesets.Vitaru.Judgements;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Objects.Drawables;
+using OpenTK.Graphics;
+using osu.Framework.Extensions.Color4Extensions;
+using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Rulesets.Vitaru.UI
 {
     public class VitaruPlayfield : Playfield<VitaruHitObject, VitaruJudgement>
     {
         public static Container vitaruPlayfield;
+        private Container visablePlayfield;
+        private Box cover;
 
         public override bool ProvidingUserCursor => true;
 
@@ -40,8 +45,32 @@ namespace osu.Game.Rulesets.Vitaru.UI
             {
                 vitaruPlayfield = new Container
                 {
+                    Masking = false,
                     RelativeSizeAxes = Axes.Both,
-                    Depth = 0,
+                    Depth = 2,
+                },
+                visablePlayfield = new Container
+                {
+                    Masking = true,
+                    Position = new Vector2(-10),
+                    Origin = Anchor.TopLeft,
+                    Anchor = Anchor.TopLeft,
+                    Size = new Vector2(1.48f , 1.46f),
+                    RelativeSizeAxes = Axes.Both,
+                    Depth = 1,
+                    BorderColour = Color4.Red,
+                    BorderThickness = 10,
+                    Children = new Drawable[]
+                    {
+                        cover = new Box
+                        {
+                            Colour = Color4.Black,
+                            AlwaysPresent = true,
+                            RelativeSizeAxes = Axes.Both,
+                            Alpha = 0f,
+                            Depth = 0,
+                        }
+                    }
                 },
             });
         }

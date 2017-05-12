@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
             VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(Team)
             {
                 Origin = Anchor.Centre,
-                Depth = 0,
+                Depth = 5,
                 BulletColor = PatternColor,
                 BulletAngleRadian = radian,
                 BulletSpeed = speed,

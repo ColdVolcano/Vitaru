@@ -21,6 +21,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         public float BulletAngleRadian { get; set; } = -10;
         public bool UpdateVelocity { get; set; } = false;
 
+        //This is an extra 10 outside of playerbounds intentionally. There is No escape.
         private Vector4 BulletBounds = new Vector4(-10, -10, 522, 830);
 
         public static int BulletCount = 0;
@@ -50,7 +51,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
                     Origin = Anchor.Centre,
                     Anchor = Anchor.Centre,
                     BorderThickness = 3,
-                    Depth = 1,
+                    Depth = 5,
                     AlwaysPresent = true,
                     BorderColour = BulletColor,
                     Alpha = 1f,
@@ -63,6 +64,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
                             Alpha = 1,
                             Width = BulletWidth * 2,
                             Height = BulletWidth * 2,
+                            Depth = 5,
                         },
                     },
                 },
@@ -72,7 +74,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
                         Anchor = Anchor.Centre,
                         RelativeSizeAxes = Axes.Both,
                         Scale = new Vector2(BulletWidth * 2),
-                        Depth = 2,
+                        Depth = 6,
                         AlwaysPresent = true,
                         Masking = true,
                         EdgeEffect = new EdgeEffect
