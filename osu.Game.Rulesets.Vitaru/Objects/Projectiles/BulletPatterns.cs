@@ -16,12 +16,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
     {
         public abstract int PatternID { get; }
         public float PatternSpeed { get; set; }
-        public float PatternComplexity { get; set; }
-        public float PatternAngleRadian { get; set; }
-        public float PatternAngleDegree { get; set; }
-        public float PatternBulletWidth { get; set; }
+        public float PatternComplexity { get; set; } = 1;
+        public float PatternAngleRadian { get; set; } = -10;
+        public float PatternAngleDegree { get; set; } = 0;
+        public float PatternBulletWidth { get; set; } = 2;
         public int Team { get; set; }
-        public int BulletAount { get; set; }
 
         public Color4 PatternColor { get; set; } = Color4.White;
         protected int bulletCount { get; set; } = 0;
@@ -42,27 +41,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
             if (bulletCount < 1)
                 Dispose();
         }
-        protected void bulletAddDeg(float speed, float degree)
-        {
-            bulletCount++;
-            Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
-            {
-                Origin = Anchor.Centre,
-                Depth = 0,
-                BulletColor = Color4.Cyan,
-                BulletAngleDegree = degree,
-                BulletSpeed = speed,
-                BulletWidth = PatternBulletWidth,
-            });
-            bullet.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), bullet));
-        }
-
         protected void bulletAddRad(float speed, float radian)
         {
             bulletCount++;
             Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
+            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(Team)
             {
                 Origin = Anchor.Centre,
                 Depth = 0,
@@ -86,10 +69,12 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         protected override void LoadComplete()
         {
             base.LoadComplete();
+            if (PatternAngleRadian == -10)
+                PatternAngleRadian = MathHelper.DegreesToRadians(PatternAngleDegree - 90);
             float directionModifier = -0.1f * PatternComplexity;
             for (int i = 1; i <= (3 * PatternComplexity); i++)
             {
-                bulletAddRad(0.15f, PatternAngleRadian + directionModifier);
+                bulletAddRad(PatternSpeed, PatternAngleRadian + directionModifier);
                 directionModifier += 0.1f;
             }
         }

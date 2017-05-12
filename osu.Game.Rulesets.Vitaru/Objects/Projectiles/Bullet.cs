@@ -18,7 +18,6 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         public Color4 BulletColor { get; set; } = Color4.White;
         public float BulletSpeed { get; set; } = 1f;
         public float BulletWidth { get; set; } = 12f;
-        public float BulletAngleDegree { get; set; } = 0;
         public float BulletAngleRadian { get; set; } = -10;
         public bool UpdateVelocity { get; set; } = false;
 
@@ -88,19 +87,9 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
 
         public Vector2 GetBulletVelocity()
         {
-            if (BulletAngleRadian != -10)
-            {
-                bulletVelocity.X = BulletSpeed * (((float)Math.Cos(BulletAngleRadian)));
-                bulletVelocity.Y = BulletSpeed * ((float)Math.Sin(BulletAngleRadian));
-                return bulletVelocity;
-            }
-            else
-            {
-                BulletAngleDegree = BulletAngleDegree - 90;
-                bulletVelocity.X = BulletSpeed * (((float)Math.Cos(BulletAngleDegree * (Math.PI / 180))));
-                bulletVelocity.Y = BulletSpeed * ((float)Math.Sin(BulletAngleDegree * (Math.PI / 180)));
-                return bulletVelocity;
-            }
+            bulletVelocity.X = BulletSpeed * (((float)Math.Cos(BulletAngleRadian)));
+            bulletVelocity.Y = BulletSpeed * ((float)Math.Sin(BulletAngleRadian));
+            return bulletVelocity;
         }
 
         protected override void Update()
