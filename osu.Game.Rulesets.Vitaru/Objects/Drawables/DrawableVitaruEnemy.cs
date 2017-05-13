@@ -159,7 +159,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 sliderDone = true;
             }
 
-            if (enemy.EndTime < Time.Current && hasShot == true && Position.Y <= -30)
+            if (enemy.EndTime < Time.Current && hasShot == true && Position.Y <= -300)
             {
                 Dispose();
             }
@@ -177,12 +177,14 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 }
                 currentRepeat = repeat;
             }
-            UpdateProgress(progress, repeat);
+            if(!sliderDone)
+                UpdateProgress(progress, repeat);
         }
 
         public void UpdateProgress(double progress, int repeat)
         {
-            Position = enemy.Curve.PositionAt(progress);
+            if(!sliderDone)
+                Position = enemy.Curve.PositionAt(progress);
         }
 
         internal interface ISliderProgress
