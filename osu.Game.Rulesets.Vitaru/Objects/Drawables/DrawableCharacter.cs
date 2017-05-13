@@ -23,7 +23,6 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 
         public Vector2 Speed { get; set; } = Vector2.Zero;
         public float CharacterHealth { get; set; } = 100;
-        public float Armor { get; internal set; } = 1; //All damage taken should be divided by this number. During kiai player will only take half damage so [2]
         public int Team { get; set; } = 0; // 0 = Player, 1 = Ememies + Boss(s) in Singleplayer
         public int ProjectileDamage { get; set; }
         public int BPM { get; set; } = (200);
@@ -54,7 +53,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         /// <returns>If the Character died</returns>
         public bool TakeDamage(int damage)
         {
-            CharacterHealth -= (int)(damage * Armor);
+            CharacterHealth -= damage;
             if (CharacterHealth <= 0)
             {
                 Dispose();

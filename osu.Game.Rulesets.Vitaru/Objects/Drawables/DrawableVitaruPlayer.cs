@@ -54,7 +54,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 Judgement.Result = HitResult.Miss;
         }
 
-        private const float playerSpeed = 0.5f;
+        private const float playerSpeed = 0.4f;
         private Vector2 positionChange = Vector2.Zero;
         public static float Energy;
         public static float Health;
@@ -77,8 +77,8 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 
             if (keys[Key.LShift] | keys[Key.RShift])
             {
-                xTranslationDistance /= 4;
-                yTranslationDistance /= 4;
+                xTranslationDistance /= 2;
+                yTranslationDistance /= 2;
             }
             if (keys[Key.Up])
             {
