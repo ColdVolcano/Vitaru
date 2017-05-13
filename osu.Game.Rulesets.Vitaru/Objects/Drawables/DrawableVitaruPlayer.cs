@@ -127,6 +127,20 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 Sign.Alpha = 1;
                 CharacterHealth = 100;
                 Sign.FadeOut(2500 , EasingTypes.InQuint);
+                /*
+                Flower f;
+                VitaruPlayfield.vitaruPlayfield.Add(f = new Flower(Team)
+                {
+                    Origin = Anchor.Centre,
+                    Depth = 5,
+                    PatternColor = Color4.Red,
+                    PatternAngleDegree = 0,
+                    PatternSpeed = 0.5f,
+                    PatternBulletWidth = 10,
+                    PatternComplexity = 4,
+                });
+                f.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), f));
+                */
             }
         }
 

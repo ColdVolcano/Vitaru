@@ -69,8 +69,10 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         protected override void LoadComplete()
         {
             base.LoadComplete();
+
             if (PatternAngleRadian == -10)
                 PatternAngleRadian = MathHelper.DegreesToRadians(PatternAngleDegree - 90);
+
             float directionModifier = -0.1f * PatternComplexity;
             for (int i = 1; i <= (3 * PatternComplexity); i++)
             {
@@ -91,21 +93,39 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         protected override void LoadComplete()
         {
             base.LoadComplete();
+
             if (PatternAngleRadian == -10)
                 PatternAngleRadian = MathHelper.DegreesToRadians(PatternAngleDegree - 90);
-            float speedModifier = 0;
-            for (int i = 1; i <= 3 + PatternComplexity; i++)
+
+            for (int i = 1; i <= 3 * PatternComplexity; i++)
             {
-                bulletAddRad(0.12f + speedModifier, PatternAngleRadian);
-                speedModifier += 0.02f;
+                bulletAddRad(0.12f + PatternSpeed, PatternAngleRadian);
+                PatternSpeed += 0.02f;
             }
         }
     }
-    public class ConvexWave : BulletPattern
+    public class Flower : BulletPattern
     {
         public override int PatternID => 2;
 
+        Bullet b;
+        public Flower(int team)
+        {
+            Team = team;
+        }
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
 
+            double timeSaved = Time.Current;
+            int a = 0;
+            for (int j = 1; j <= 16 * PatternComplexity; j++)
+            {
+                a = a + 21;
+                PatternAngleRadian = MathHelper.DegreesToRadians(a - 90);
+                bulletAddRad(PatternSpeed, a);
+            }
+        }
     }
     public class DirectStrike : BulletPattern
     {

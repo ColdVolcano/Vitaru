@@ -209,7 +209,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             playerRelativePositionAngle();
             PlaySamples();
             Wave w;
-            VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(1)
+            VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(Team)
             {
                 Origin = Anchor.Centre,
                 Depth = 6,
@@ -217,7 +217,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 PatternAngleRadian = playerPos,
                 PatternSpeed = 0.2f,
                 PatternBulletWidth = 8,
-                PatternComplexity = 2,
+                PatternComplexity = 1.75f,
             });
             w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
         }
