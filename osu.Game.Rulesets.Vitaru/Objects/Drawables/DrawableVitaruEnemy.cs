@@ -2,19 +2,13 @@
 using OpenTK;
 using System;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Vitaru.Objects.Projectiles;
-using osu.Game.Rulesets.Vitaru.Objects.Drawables;
-using osu.Game.Rulesets.Vitaru.Objects;
 using osu.Game.Rulesets.Vitaru.Objects.Characters;
-using osu.Framework.Audio.Sample;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Objects.Types;
-using osu.Game.Rulesets.Vitaru.Judgements;
 using osu.Framework.MathUtils;
 using System.Collections.Generic;
 using osu.Game.Rulesets.Vitaru.UI;
-using osu.Game.Rulesets.Vitaru.Beatmaps;
 
 namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 {
@@ -206,20 +200,86 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 
         private void enemyShoot()
         {
+            int pattern = RNG.Next(1, 6);
             playerRelativePositionAngle();
             PlaySamples();
-            Wave w;
-            VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(Team)
+            switch (pattern)
             {
-                Origin = Anchor.Centre,
-                Depth = 6,
-                PatternColor = Color4.Green,
-                PatternAngleRadian = playerPos,
-                PatternSpeed = 0.2f,
-                PatternBulletWidth = 8,
-                PatternComplexity = 1.75f,
-            });
-            w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
+                case 1: // Wave
+                    Wave w;
+                    VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 2f,
+                    });
+                    w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
+                    break;
+
+                case 2: // Line
+                    Line l;
+                    VitaruPlayfield.vitaruPlayfield.Add(l = new Line(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 2f,
+                    });
+                    l.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), l));
+                    break;
+
+                case 3: // Cool wave
+                    CoolWave cw;
+                    VitaruPlayfield.vitaruPlayfield.Add(cw = new CoolWave(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.4f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 2f,
+                    });
+                    cw.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), cw));
+                    break;
+
+                case 4: // Circle
+                    Circle c;
+                    VitaruPlayfield.vitaruPlayfield.Add(c = new Circle(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Cyan,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 10,
+                        PatternComplexity = 2f,
+                    });
+                    c.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), c));
+                    break;
+
+                case 5: // Fast shot !
+                    Wave f;
+                    VitaruPlayfield.vitaruPlayfield.Add(f = new Wave(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.5f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 1/3,
+                    });
+                    f.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), f));
+                    break;
+            }
         }
 
         public float playerRelativePositionAngle()
