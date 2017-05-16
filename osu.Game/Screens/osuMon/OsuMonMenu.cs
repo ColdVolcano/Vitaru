@@ -8,6 +8,9 @@ namespace osu.Game.Screens.osuMon
 {
     public class OsuMonMenu : ScreenWhiteBox
     {
+        public OsuMonMenu()
+        {
 
+        }
     }
 }

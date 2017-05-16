@@ -24,6 +24,7 @@ using OpenTK.Input;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Game.Screens.osuMon;
 
 namespace osu.Game.Screens.Menu
 {
@@ -56,6 +57,7 @@ namespace osu.Game.Screens.Menu
                             OnEdit = delegate { Push(new Editor()); },
                             OnSolo = delegate { Push(consumeSongSelect()); },
                             OnMulti = delegate { Push(new Lobby()); },
+                            OnOsuMon = delegate { Push(new OsuMonMenu()); },
                             OnExit = delegate { Exit(); },
                         }
                     }
