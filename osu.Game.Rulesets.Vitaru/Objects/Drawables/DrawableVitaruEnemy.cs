@@ -243,9 +243,9 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                         Depth = 6,
                         PatternColor = Color4.Green,
                         PatternAngleRadian = playerPos,
-                        PatternSpeed = 0.4f,
+                        PatternSpeed = 0.3f,
                         PatternBulletWidth = 8,
-                        PatternComplexity = 2f,
+                        PatternComplexity = 4f,
                     });
                     cw.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), cw));
                     break;
@@ -265,7 +265,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                     c.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), c));
                     break;
 
-                case 5: // Fast shot !
+                case 5: // Snipe!
                     Wave f;
                     VitaruPlayfield.vitaruPlayfield.Add(f = new Wave(Team)
                     {
@@ -275,7 +275,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                         PatternAngleRadian = playerPos,
                         PatternSpeed = 0.5f,
                         PatternBulletWidth = 8,
-                        PatternComplexity = 1/3,
+                        PatternComplexity = 0.4f,
                     });
                     f.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), f));
                     break;

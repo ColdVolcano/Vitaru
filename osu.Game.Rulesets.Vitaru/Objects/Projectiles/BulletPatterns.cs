@@ -158,12 +158,12 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         {
             base.LoadComplete();
 
-            float speedModifier = 0.02f + 0.01f * (PatternSpeed);
-            float directionModifier = -0.15f - 0.075f * (PatternComplexity);
+            float speedModifier = 0.01f + 0.01f * (PatternComplexity);
+            float directionModifier = -0.075f - 0.075f * (PatternComplexity);
             for (int i = 1; i <= 3 + (PatternComplexity * 2); i++)
             {
                 bulletAddRad(
-                    0.1f + Math.Abs(speedModifier),
+                    PatternSpeed + Math.Abs(speedModifier),
                     directionModifier + PatternAngleRadian
                 );
                 speedModifier -= 0.01f;
@@ -172,20 +172,3 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Projectiles
         }
     }
 }
-
-
-/*
-                case 3: // Cool wave
-                    speedModifier = 0.02f + 0.01f * (patternDifficulty - 1);
-                    directionModifier = -0.15f - 0.075f * (patternDifficulty - 1);
-                    for (int i = 1; i <= 3 + patternDifficulty * 2; i++)
-                    {
-                        bulletAddRad(
-                            0.1f + Math.Abs(speedModifier),
-                            directionModifier + randomDirection
-                        );
-                        speedModifier -= 0.01f;
-                        directionModifier += 0.075f;
-                    }
-                    break;
-            }*/
