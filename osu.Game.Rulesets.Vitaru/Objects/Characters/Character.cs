@@ -12,7 +12,6 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Characters
     public abstract class Character : VitaruHitObject
     {
         public float CharacterHealth { get; set; } = 100;
-        public float Armor { get; internal set; } = 1; //All damage taken should be divided by this number. During kiai player will only take half damage so [2]
         public int Team { get; set; } = 0; // 0 = Player, 1 = Ememies + Boss(s) in Singleplayer
         public int ProjectileDamage { get; set; }
 

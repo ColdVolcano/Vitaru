@@ -30,8 +30,10 @@ namespace osu.Game.Rulesets.Vitaru.Beatmaps
             if (playerLoaded == false)
             {
                 playerLoaded = true;
+                VitaruPlayer.PlayerPosition = new Vector2(256, 800);
                 yield return new VitaruPlayer
                 {
+                    //This Position does nothing atm
                     Position = new Vector2(256, 800),
                     StartTime = 0f,
                 };

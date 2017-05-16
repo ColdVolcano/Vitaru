@@ -27,6 +27,8 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         public DrawableVitaruPlayer(VitaruPlayer player) : base(player)
         {
             this.player = player;
+
+            //Gross Key stuff
             keys[Key.Up] = false;
             keys[Key.Right] = false;
             keys[Key.Down] = false;
@@ -35,6 +37,7 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             keys[Key.X] = false;
             keys[Key.LShift] = false;
             keys[Key.RShift] = false;
+
             Origin = Anchor.Centre;
             Position = player.Position;
             CharacterType = HitObjectType.Player;
@@ -42,14 +45,16 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Team = 0;
             HitboxColor = Color4.Yellow;
             HitboxWidth = 4;
-            OnShoot = shoot;
+            CharacterShoot = shoot;
         }
 
         protected override void CheckJudgement(bool userTriggered)
         {
+            if(CharacterHealth <= 0)
+                Judgement.Result = HitResult.Miss;
         }
 
-        private const float playerSpeed = 0.5f;
+        private const float playerSpeed = 0.4f;
         private Vector2 positionChange = Vector2.Zero;
         public static float Energy;
         public static float Health;
@@ -61,21 +66,44 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             HitDetect();
 
             playerInput();
+            playerMovement();
+        }
+
+        private void playerMovement()
+        {
+            //Handles Player Speed
+            float yTranslationDistance = playerSpeed * (float)(Clock.ElapsedFrameTime);
+            float xTranslationDistance = playerSpeed * (float)(Clock.ElapsedFrameTime);
+
+            if (keys[Key.LShift] | keys[Key.RShift])
+            {
+                xTranslationDistance /= 2;
+                yTranslationDistance /= 2;
+            }
+            if (keys[Key.Up])
+            {
+                VitaruPlayer.PlayerPosition.Y -= yTranslationDistance;
+            }
+            if (keys[Key.Left])
+            {
+                VitaruPlayer.PlayerPosition.X -= xTranslationDistance;
+            }
+            if (keys[Key.Down])
+            {
+                VitaruPlayer.PlayerPosition.Y += yTranslationDistance;
+            }
+            if (keys[Key.Right])
+            {
+                VitaruPlayer.PlayerPosition.X += xTranslationDistance;
+            }
+
+            VitaruPlayer.PlayerPosition = Vector2.ComponentMin(VitaruPlayer.PlayerPosition, playerBounds.Yw);
+            VitaruPlayer.PlayerPosition  = Vector2.ComponentMax(VitaruPlayer.PlayerPosition, playerBounds.Xz);
+            Position = VitaruPlayer.PlayerPosition;
         }
 
         private void playerInput()
         {
-            //Handles Player Speed
-            var pos = Position;
-            float ySpeed = playerSpeed * (float)(Clock.ElapsedFrameTime);
-            float xSpeed = playerSpeed * (float)(Clock.ElapsedFrameTime);
-
-            //All these handle keys and when they are or aren't pressed
-            if (keys[Key.LShift] | keys[Key.RShift])
-            {
-                xSpeed /= 3;
-                ySpeed /= 3;
-            }
             if (keys[Key.Z])
             {
                 Shooting = true;
@@ -86,32 +114,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             }
             if (keys[Key.X])
             {
-                Spell();
+                spell();
             }
-            if (keys[Key.Up])
-            {
-                pos.Y -= ySpeed;
-            }
-            if (keys[Key.Left])
-            {
-                pos.X -= xSpeed;
-            }
-            if (keys[Key.Down])
-            {
-                pos.Y += ySpeed;
-            }
-            if (keys[Key.Right])
-            {
-                pos.X += xSpeed;
-            }
-
-            pos = Vector2.ComponentMin(pos, playerBounds.Yw);
-            pos = Vector2.ComponentMax(pos, playerBounds.Xz);
-            Position = pos;
-            VitaruPlayer.PlayerPosition = pos;
         }
 
-        private void Spell()
+        private void spell()
         {
             if(Time.Current > savedTime + 10000)
             {
@@ -120,44 +127,37 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 Sign.Alpha = 1;
                 CharacterHealth = 100;
                 Sign.FadeOut(2500 , EasingTypes.InQuint);
+                /*
+                Flower f;
+                VitaruPlayfield.vitaruPlayfield.Add(f = new Flower(Team)
+                {
+                    Origin = Anchor.Centre,
+                    Depth = 5,
+                    PatternColor = Color4.Red,
+                    PatternAngleDegree = 0,
+                    PatternSpeed = 0.5f,
+                    PatternBulletWidth = 10,
+                    PatternComplexity = 4,
+                });
+                f.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), f));
+                */
             }
         }
 
         private void shoot()
         {
-            Bullet a;
-            Bullet b;
-            Bullet c;
-            VitaruPlayfield.vitaruPlayfield.Add(a = new Bullet(Team)
+            Wave a;
+            VitaruPlayfield.vitaruPlayfield.Add(a = new Wave(Team)
             {
-                Depth = 0,
                 Origin = Anchor.Centre,
-                BulletSpeed = 1f,
-                BulletColor = Color4.Red,
-                BulletAngleDegree = -5,
-                BulletWidth = 6,
-            });
-            VitaruPlayfield.vitaruPlayfield.Add(b = new Bullet(Team)
-            {
-                Depth = 1,
-                Origin = Anchor.Centre,
-                BulletSpeed = 1f,
-                BulletColor = Color4.Red,
-                BulletAngleDegree = 0,
-                BulletWidth = 6,
-            });
-            VitaruPlayfield.vitaruPlayfield.Add(c = new Bullet(Team)
-            {
-                Depth = 0,
-                Origin = Anchor.Centre,
-                BulletSpeed = 1f,
-                BulletColor = Color4.Red,
-                BulletAngleDegree = 5,
-                BulletWidth = 6,
+                Depth = 5,
+                PatternColor = Color4.Red,
+                PatternAngleDegree = 0,
+                PatternSpeed = 1f,
+                PatternBulletWidth = 8,
+                PatternComplexity = 1,
             });
             a.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), a));
-            b.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), b));
-            c.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), c));
         }
 
         protected override bool OnKeyDown(InputState state, KeyDownEventArgs args)

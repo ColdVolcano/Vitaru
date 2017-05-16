@@ -2,19 +2,13 @@
 using OpenTK;
 using System;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Vitaru.Objects.Projectiles;
-using osu.Game.Rulesets.Vitaru.Objects.Drawables;
-using osu.Game.Rulesets.Vitaru.Objects;
 using osu.Game.Rulesets.Vitaru.Objects.Characters;
-using osu.Framework.Audio.Sample;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Objects.Types;
-using osu.Game.Rulesets.Vitaru.Judgements;
 using osu.Framework.MathUtils;
 using System.Collections.Generic;
 using osu.Game.Rulesets.Vitaru.UI;
-using osu.Game.Rulesets.Vitaru.Beatmaps;
 
 namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
 {
@@ -42,17 +36,13 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Alpha = 1;
         }
 
-        private int patternDifficulty = 1; // It will be depending on OD in future
-        private float circleAngle = 1f; // Angle of circles currently in degree
-        private float randomDirection = 0; // For more bullet hell !
-        private int bulletPattern = 1;
         private bool hasShot = false;
         private bool sliderDone = false;
 
         protected override void Update()
         {
             enemy.EnemyPosition = enemy.Position;
-            bulletPattern = RNG.Next(1, 6); // could be remplaced by map seed, with stackleniency
+            int bulletPattern = RNG.Next(1, 6); // could be remplaced by map seed, with stackleniency
 
             HitDetect();
 
@@ -120,6 +110,14 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             Expire();
         }
 
+        private void leave()
+        {
+            int r = RNG.Next(-100, 612);
+            MoveTo(new Vector2(r, -300), 2000, EasingTypes.InCubic);
+            FadeOut(2000, EasingTypes.InCubic);
+            ScaleTo(new Vector2(0.75f), 2000, EasingTypes.InCubic);
+        }
+
         /// <summary>
         /// All the hitcircle stuff
         /// </summary>
@@ -128,10 +126,10 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             if (HitObject.StartTime < Time.Current && hasShot == false)
             {
                 enemyShoot();
-                FadeOut(Math.Min(TIME_FADEOUT * 2, TIME_PREEMPT));
+                leave();
                 hasShot = true;
             }
-            if (HitObject.StartTime < Time.Current && hasShot == true && Alpha < 0.1f)
+            if (HitObject.StartTime < Time.Current && hasShot == true && Position.Y <= -300)
             {
                 Dispose();
             }
@@ -151,11 +149,11 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
             if (enemy.EndTime < Time.Current && hasShot == true && sliderDone == false)
             {
                 enemyShoot();
-                FadeOut(Math.Min(TIME_FADEOUT * 2, TIME_PREEMPT));
+                leave();
                 sliderDone = true;
             }
 
-            if (enemy.EndTime < Time.Current && hasShot == true && Alpha < 0.1f)
+            if (enemy.EndTime < Time.Current && hasShot == true && Position.Y <= -300)
             {
                 Dispose();
             }
@@ -173,12 +171,14 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
                 }
                 currentRepeat = repeat;
             }
-            UpdateProgress(progress, repeat);
+            if(!sliderDone)
+                UpdateProgress(progress, repeat);
         }
 
         public void UpdateProgress(double progress, int repeat)
         {
-            Position = enemy.Curve.PositionAt(progress);
+            if(!sliderDone)
+                Position = enemy.Curve.PositionAt(progress);
         }
 
         internal interface ISliderProgress
@@ -197,94 +197,87 @@ namespace osu.Game.Rulesets.Vitaru.Objects.Drawables
         /// <summary>
         /// All the shooting stuff
         /// </summary>
-        private void bulletAddDeg(float speed, float degree)
-        {
-            Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
-            {
-                Origin = Anchor.Centre,
-                Depth = 1,
-                BulletColor = Color4.Cyan,
-                BulletAngleDegree = playerPos + degree,
-                BulletSpeed = speed,
-                BulletWidth = 10,
-            });
-            bullet.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), bullet));
-        }
-
-        private void bulletAddRad(float speed, float degree)
-        {
-            Bullet bullet;
-            VitaruPlayfield.vitaruPlayfield.Add(bullet = new Bullet(1)
-            {
-                Origin = Anchor.Centre,
-                Depth = 1,
-                BulletColor = enemyColor,
-                BulletAngleRadian = playerPos + degree,
-                BulletSpeed = speed,
-                BulletWidth = 8,
-            });
-            bullet.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), bullet));
-        }
 
         private void enemyShoot()
         {
+            int pattern = RNG.Next(1, 6);
             playerRelativePositionAngle();
-            patternDifficulty = RNG.Next(0, 5); // For circle currently
-            randomDirection = RNG.Next(-50, 51); // Between -0.05f and 0.05f
-            randomDirection = randomDirection / 100; // It seems that add / 100 after the random breaks randomDirection idk why
-
-            float speedModifier;
-            float directionModifier;
-
             PlaySamples();
-
-            switch (bulletPattern)
+            switch (pattern)
             {
                 case 1: // Wave
-                    directionModifier = -0.1f * patternDifficulty;
-                    for (int i = 1; i <= (3 * patternDifficulty); i++)
+                    Wave w;
+                    VitaruPlayfield.vitaruPlayfield.Add(w = new Wave(Team)
                     {
-                        bulletAddRad(0.15f, randomDirection + directionModifier);
-                        directionModifier += 0.1f;
-                    }
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 2f,
+                    });
+                    w.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), w));
                     break;
 
                 case 2: // Line
-                    speedModifier = 0;
-                    for (int i = 1; i <= 3 + patternDifficulty; i++)
+                    Line l;
+                    VitaruPlayfield.vitaruPlayfield.Add(l = new Line(Team)
                     {
-                        bulletAddRad(0.12f + speedModifier, randomDirection);
-                        speedModifier += 0.02f;
-                    }
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 2f,
+                    });
+                    l.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), l));
                     break;
 
                 case 3: // Cool wave
-                    speedModifier = 0.02f + 0.01f * (patternDifficulty - 1);
-                    directionModifier = -0.15f - 0.075f * (patternDifficulty - 1);
-                    for (int i = 1; i <= 3 + patternDifficulty * 2; i++)
+                    CoolWave cw;
+                    VitaruPlayfield.vitaruPlayfield.Add(cw = new CoolWave(Team)
                     {
-                        bulletAddRad(
-                            0.1f + Math.Abs(speedModifier),
-                            directionModifier + randomDirection
-                        );
-                        speedModifier -= 0.01f;
-                        directionModifier += 0.075f;
-                    }
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.3f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 4f,
+                    });
+                    cw.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), cw));
                     break;
 
                 case 4: // Circle
-                    directionModifier = (float)(90 / Math.Pow(2, patternDifficulty));
-                    circleAngle = 0;
-                    for (int j = 1; j <= Math.Pow(2, patternDifficulty + 2); j++)
+                    Circle c;
+                    VitaruPlayfield.vitaruPlayfield.Add(c = new Circle(Team)
                     {
-                        bulletAddDeg(0.15f, circleAngle);
-                        circleAngle += directionModifier;
-                    }
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Cyan,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.2f,
+                        PatternBulletWidth = 10,
+                        PatternComplexity = 2f,
+                    });
+                    c.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), c));
                     break;
 
-                case 5: // Fast shot !
-                    bulletAddRad(0.30f, 0 + randomDirection);
+                case 5: // Snipe!
+                    Wave f;
+                    VitaruPlayfield.vitaruPlayfield.Add(f = new Wave(Team)
+                    {
+                        Origin = Anchor.Centre,
+                        Depth = 6,
+                        PatternColor = Color4.Green,
+                        PatternAngleRadian = playerPos,
+                        PatternSpeed = 0.5f,
+                        PatternBulletWidth = 8,
+                        PatternComplexity = 0.4f,
+                    });
+                    f.MoveTo(ToSpaceOfOtherDrawable(new Vector2(0, 0), f));
                     break;
             }
         }
