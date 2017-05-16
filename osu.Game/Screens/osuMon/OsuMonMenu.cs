@@ -23,6 +23,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using osu.Framework.IO.Stores;
 using osu.Game.Screens.Tournament;
+using osu.Game.Screens.Menu;
 
 namespace osu.Game.Screens.osuMon
 {
@@ -41,6 +42,7 @@ namespace osu.Game.Screens.osuMon
         private Task writeOp;
 
         private Storage storage;
+        private MenuVisualisation vis;
 
         protected override DependencyContainer CreateLocalDependencies(DependencyContainer parent) => new DependencyContainer(parent);
 
@@ -113,6 +115,11 @@ namespace osu.Game.Screens.osuMon
                                 {
                                     RelativeSizeAxes = Axes.Both,
                                     Colour = new Color4(54, 54, 54, 255)
+                                },
+                                vis = new MenuVisualisation
+                                {
+                                    Scale = Vector2.Zero,
+                                    Position = new Vector2(0)
                                 },
                                 new OsuSpriteText
                                 {
