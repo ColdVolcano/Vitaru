@@ -2,7 +2,6 @@
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Logging;
 using OpenTK;
@@ -71,7 +70,7 @@ namespace osu.Framework.Graphics.Visualisation
         [BackgroundDependencyLoader]
         private void load(FrameworkConfigManager config)
         {
-            enabled = config.GetBindable<bool>(FrameworkConfig.ShowLogOverlay);
+            enabled = config.GetBindable<bool>(FrameworkSetting.ShowLogOverlay);
             State = enabled.Value ? Visibility.Visible : Visibility.Hidden;
         }
 

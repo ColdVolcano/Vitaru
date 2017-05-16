@@ -26,14 +26,8 @@ namespace osu.Game.Screens.Menu
         public Action OnSolo;
         public Action OnSettings;
         public Action OnMulti;
-        public Action OnOsuMon;
         public Action OnChart;
         public Action OnTest;
-
-        private MenuVisualisation vis1;
-        private MenuVisualisation vis2;
-
-        public float[] VisualisationData;
 
         private Toolbar toolbar;
 
@@ -63,17 +57,6 @@ namespace osu.Game.Screens.Menu
 
             Children = new Drawable[]
             {
-                vis1 = new MenuVisualisation
-                {
-                    Scale = Vector2.Zero,
-                    Position = new Vector2(15, -(BUTTON_AREA_HEIGHT / 2))
-                },
-                vis2 = new MenuVisualisation
-                {
-                    Scale = Vector2.Zero,
-                    Position = new Vector2(-5, (BUTTON_AREA_HEIGHT / 2)),
-                    Rotation = 180,
-                },
                 buttonArea = new Container
                 {
                     Anchor = Anchor.Centre,
@@ -99,7 +82,7 @@ namespace osu.Game.Screens.Menu
                             AutoSizeAxes = Axes.Both,
                             Children = new[]
                             {
-                                settingsButton = new Button(@"settings", @"options", FontAwesome.fa_gear, new Color4(85, 85, 85, 255), () => OnSettings?.Invoke(), -WEDGE_WIDTH, Key.O),
+                                settingsButton = new Button(@"settings", @"settings", FontAwesome.fa_gear, new Color4(85, 85, 85, 255), () => OnSettings?.Invoke(), -WEDGE_WIDTH, Key.O),
                                 backButton = new Button(@"back", @"back", FontAwesome.fa_osu_left_o, new Color4(51, 58, 94, 255), onBack, -WEDGE_WIDTH),
                                 iconFacade = new Container //need a container to make the osu! icon flow properly.
                                 {
@@ -121,7 +104,6 @@ namespace osu.Game.Screens.Menu
             buttonsPlay.Add(new Button(@"solo", @"freeplay", FontAwesome.fa_user, new Color4(102, 68, 204, 255), () => OnSolo?.Invoke(), WEDGE_WIDTH, Key.P));
             buttonsPlay.Add(new Button(@"multi", @"multiplayer", FontAwesome.fa_users, new Color4(94, 63, 186, 255), () => OnMulti?.Invoke(), 0, Key.M));
             buttonsPlay.Add(new Button(@"chart", @"charts", FontAwesome.fa_osu_charts, new Color4(80, 53, 160, 255), () => OnChart?.Invoke()));
-            buttonsPlay.Add(new Button(@"osumon", @"osumon", FontAwesome.fa_osu_gear, new Color4(238, 170, 0, 255), () => OnOsuMon?.Invoke()));
 
             buttonsTopLevel.Add(new Button(@"play", @"play", FontAwesome.fa_osu_logo, new Color4(102, 68, 204, 255), onPlay, WEDGE_WIDTH, Key.P));
             buttonsTopLevel.Add(new Button(@"osu!editor", @"edit", FontAwesome.fa_osu_edit_o, new Color4(238, 170, 0, 255), () => OnEdit?.Invoke(), 0, Key.E));
@@ -231,8 +213,6 @@ namespace osu.Game.Screens.Menu
                 {
                     case MenuState.Exit:
                     case MenuState.Initial:
-                        vis1.AudioData = new float[128];
-                        vis2.AudioData = new float[128];
                         toolbar?.Hide();
 
                         buttonAreaBackground.ScaleTo(Vector2.One, 500, EasingTypes.Out);
@@ -253,25 +233,9 @@ namespace osu.Game.Screens.Menu
                             osuLogo.RotateTo(20, EXIT_DELAY * 1.5f);
                             osuLogo.FadeOut(EXIT_DELAY);
                         }
-                        vis1.ScaleTo(new Vector2(0, 1), 300, EasingTypes.Out);
-                        vis1.FadeOut(175, EasingTypes.Out);
-                        vis2.ScaleTo(new Vector2(0, 1), 300, EasingTypes.Out);
-                        vis2.FadeOut(175, EasingTypes.Out);
                         break;
                     case MenuState.TopLevel:
-                        vis1.ResizeTo(new Vector2(921, 500), 200);
-                        vis1.MoveToX(15, 200);
-                        vis2.ResizeTo(new Vector2(921, 500), 200);
-                        vis2.MoveToX(-5, 200);
-
                         buttonArea.Flush(true);
-                        if (lastState != MenuState.Play)
-                        {
-                            vis1.ScaleTo(new Vector2(1, 0));
-                            vis1.FadeIn();
-                            vis2.ScaleTo(new Vector2(1, 0));
-                            vis2.FadeIn();
-                        }
 
                         buttonAreaBackground.ScaleTo(Vector2.One, 200, EasingTypes.Out);
 
@@ -281,7 +245,13 @@ namespace osu.Game.Screens.Menu
                         buttonArea.FadeIn(300);
 
                         if (lastState == MenuState.Initial)
+                        {
                             buttonArea.Delay(150, true);
+
+                            if (osuLogo.Scale.X > 0.5f)
+                                using (osuLogo.BeginDelayedSequence(200, true))
+                                    osuLogo.Impact();
+                        }
 
                         Scheduler.AddDelayed(() => toolbar?.Show(), 150);
 
@@ -290,19 +260,8 @@ namespace osu.Game.Screens.Menu
 
                         foreach (Button b in buttonsPlay)
                             b.State = ButtonState.Contracted;
-                        vis1.MoveToY(BUTTON_AREA_HEIGHT / -2);
-                        vis2.MoveToY(BUTTON_AREA_HEIGHT / 2);
-                        vis1.Delay(175);
-                        vis1.ScaleTo(Vector2.One, 150);
-                        vis2.Delay(175);
-                        vis2.ScaleTo(Vector2.One, 150);
                         break;
                     case MenuState.Play:
-                        vis1.ResizeTo(new Vector2(781, 500), 200);
-                        vis1.MoveToX(-55, 200);
-                        vis2.ResizeTo(new Vector2(781, 500), 200);
-                        vis2.MoveToX(-75, 200);
-
                         foreach (Button b in buttonsTopLevel)
                             b.State = ButtonState.Exploded;
 
@@ -311,10 +270,6 @@ namespace osu.Game.Screens.Menu
                         break;
                     case MenuState.EnteringMode:
                         buttonAreaBackground.ScaleTo(new Vector2(2, 0), 300, EasingTypes.InSine);
-                        vis1.MoveToY(0, 300, EasingTypes.InSine);
-                        vis1.ScaleTo(new Vector2(1, 0), 300);
-                        vis2.MoveToY(0, 300, EasingTypes.InSine);
-                        vis2.ScaleTo(new Vector2(1, 0), 300);
 
                         buttonsTopLevel.ForEach(b => b.ContractStyle = 1);
                         buttonsPlay.ForEach(b => b.ContractStyle = 1);
@@ -339,11 +294,6 @@ namespace osu.Game.Screens.Menu
 
         protected override void Update()
         {
-            if (State != MenuState.Initial)
-            {
-                vis1.AudioData = VisualisationData;
-                vis2.AudioData = VisualisationData;
-            }
             //if (OsuGame.IdleTime > 6000 && State != MenuState.Exit)
             //    State = MenuState.Initial;
 

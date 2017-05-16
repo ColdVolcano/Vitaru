@@ -12,7 +12,6 @@ using osu.Framework.Configuration;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Input;
@@ -315,7 +314,7 @@ namespace osu.Game.Overlays
                     }
                     else
                     {
-                        BeatmapMetadata metadata = beatmap.Beatmap.BeatmapInfo.Metadata;
+                        BeatmapMetadata metadata = beatmap.Metadata;
                         title.Current = localisation.GetUnicodePreference(metadata.TitleUnicode, metadata.Title);
                         artist.Current = localisation.GetUnicodePreference(metadata.ArtistUnicode, metadata.Artist);
                     }
