@@ -72,15 +72,15 @@ namespace osu.Game.Screens.Play
 
         private Container hitRendererContainer;
 
-        private HudOverlay hudOverlay;
+        private HUDOverlay hudOverlay;
         private PauseOverlay pauseOverlay;
         private FailOverlay failOverlay;
 
         [BackgroundDependencyLoader(permitNulls: true)]
         private void load(AudioManager audio, BeatmapDatabase beatmaps, OsuConfigManager config, OsuGame osu)
         {
-            dimLevel = config.GetBindable<double>(OsuConfig.DimLevel);
-            mouseWheelDisabled = config.GetBindable<bool>(OsuConfig.MouseDisableWheel);
+            dimLevel = config.GetBindable<double>(OsuSetting.DimLevel);
+            mouseWheelDisabled = config.GetBindable<bool>(OsuSetting.MouseDisableWheel);
 
             Ruleset rulesetInstance;
 
@@ -90,7 +90,7 @@ namespace osu.Game.Screens.Play
                     Beatmap = beatmaps.GetWorkingBeatmap(BeatmapInfo, withStoryboard: true);
 
                 if (Beatmap?.Beatmap == null)
-                    throw new Exception("Beatmap was not loaded");
+                    throw new InvalidOperationException("Beatmap was not loaded");
 
                 ruleset = osu?.Ruleset.Value ?? Beatmap.BeatmapInfo.Ruleset;
                 rulesetInstance = ruleset.CreateInstance();
@@ -109,7 +109,7 @@ namespace osu.Game.Screens.Play
                 }
 
                 if (!HitRenderer.Objects.Any())
-                    throw new Exception("Beatmap contains no hit objects!");
+                    throw new InvalidOperationException("Beatmap contains no hit objects!");
             }
             catch (Exception e)
             {
@@ -138,7 +138,7 @@ namespace osu.Game.Screens.Play
 
             offsetClock = new FramedOffsetClock(decoupledClock);
 
-            userAudioOffset = config.GetBindable<double>(OsuConfig.AudioOffset);
+            userAudioOffset = config.GetBindable<double>(OsuSetting.AudioOffset);
             userAudioOffset.ValueChanged += v => offsetClock.Offset = v;
             userAudioOffset.TriggerChange();
 
@@ -154,7 +154,7 @@ namespace osu.Game.Screens.Play
 
             scoreProcessor = HitRenderer.CreateScoreProcessor();
 
-            hudOverlay = new StandardHudOverlay()
+            hudOverlay = new StandardHUDOverlay()
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre
@@ -168,6 +168,8 @@ namespace osu.Game.Screens.Play
             hudOverlay.Progress.AudioClock = decoupledClock;
             hudOverlay.Progress.AllowSeeking = HitRenderer.HasReplayLoaded;
             hudOverlay.Progress.OnSeek = pos => decoupledClock.Seek(pos);
+
+            hudOverlay.ModDisplay.Current.BindTo(Beatmap.Mods);
 
             //bind HitRenderer to ScoreProcessor and ourselves (for a pass situation)
             HitRenderer.OnAllJudged += onCompletion;
@@ -220,6 +222,15 @@ namespace osu.Game.Screens.Play
                     },
                 }
             };
+        }
+
+        protected override void Update()
+        {
+            // eagerly pause when we lose window focus (if we are locally playing).
+            if (!Game.IsActive && !HitRenderer.HasReplayLoaded)
+                Pause();
+
+            base.Update();
         }
 
         private void initializeSkipButton()

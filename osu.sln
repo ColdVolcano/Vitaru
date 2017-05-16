@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osu.Desktop", "osu.Desktop\osu.Desktop.csproj", "{2A66DD92-ADB1-4994-89E2-C94E04ACDA0D}"
 EndProject
@@ -101,10 +101,6 @@ Global
 		{007B2356-AB6F-4BD9-96D5-116FC2DCE69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{007B2356-AB6F-4BD9-96D5-116FC2DCE69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{007B2356-AB6F-4BD9-96D5-116FC2DCE69A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9A615027-B2AB-435E-B865-0C7209933457}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9A615027-B2AB-435E-B865-0C7209933457}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9A615027-B2AB-435E-B865-0C7209933457}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9A615027-B2AB-435E-B865-0C7209933457}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,7 +120,6 @@ Global
 		{230AC4F3-7783-49FB-9AEC-B83CDA3B9F3D} = {80683232-505E-41EA-A37C-2CFCF1C88C57}
 		{BAEA2F74-0315-4667-84E0-ACAC0B4BF785} = {6EAD7610-89D8-48A2-8BE0-E348297E4D8B}
 		{007B2356-AB6F-4BD9-96D5-116FC2DCE69A} = {7A75DFA2-DE65-4458-98AF-26AF96FFD6DC}
-		{9A615027-B2AB-435E-B865-0C7209933457} = {0D37A2AD-80A4-464F-A1DE-1560B70F1CE3}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

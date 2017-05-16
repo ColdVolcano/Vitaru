@@ -58,6 +58,7 @@ namespace osu.Game.Overlays.Toolbar
                             Action = () => OnOsuMon?.Invoke()
                         },
                         */
+                        new ToolbarModeSelector()
                     }
                 },
                 new FillFlowContainer
@@ -70,7 +71,6 @@ namespace osu.Game.Overlays.Toolbar
                     AutoSizeAxes = Axes.X,
                     Children = new Drawable[]
                     {
-                        new ToolbarSystemClock(),
                         new ToolbarChatButton(),
                         new ToolbarMusicButton(),
                         new ToolbarButton

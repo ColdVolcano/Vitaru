@@ -51,10 +51,5 @@ namespace osu.Framework.Audio.Track
             if (Length > 0 && CurrentTime >= Length)
                 Stop();
         }
-
-        public override float[] GetChannelData()
-        {
-            return new float[512];
-        }
     }
 }

@@ -8,7 +8,6 @@ using System.Linq;
 using osu.Framework.Configuration;
 using osu.Framework.Extensions;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
 using OpenTK;
 
 namespace osu.Framework.Graphics.UserInterface
@@ -224,6 +223,10 @@ namespace osu.Framework.Graphics.UserInterface
         public class TabFillFlowContainer<U> : FillFlowContainer<U> where U : TabItem
         {
             public Action<U, bool> TabVisibilityChanged;
+
+            protected override IComparer<Drawable> DepthComparer => new ReverseCreationOrderDepthComparer();
+
+            protected override IEnumerable<U> FlowingChildren => base.FlowingChildren.Reverse();
 
             protected override IEnumerable<Vector2> ComputeLayoutPositions()
             {
