@@ -165,7 +165,7 @@ namespace osu.Game.Screens.osuMon
                                             RelativeSizeAxes = Axes.X,
 
                                             Text = "Open Discord",
-                                            //Action = openLink.OsuMonDiscord,
+                                            Action = openLink,
                                         },
                                     }
                                 },
@@ -190,7 +190,7 @@ namespace osu.Game.Screens.osuMon
                                             RelativeSizeAxes = Axes.X,
 
                                             Text = "Join OsuMon!",
-                                            //Action = opnlink.OsuMonJoin,
+                                            Action = openLink,
                                         }
                                     }
                                 }
@@ -201,6 +201,11 @@ namespace osu.Game.Screens.osuMon
             };
 
             reset(true);
+        }
+
+        private void openLink()
+        {
+            System.Diagnostics.Process.Start("http://google.com");
         }
 
         private void writeResults(string text)
